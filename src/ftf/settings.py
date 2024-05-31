@@ -31,6 +31,6 @@ FULL_FILES: dict[str, dict[str, list[str]]] = {
     ".vscode/extensions.json": {},
     ".vscode/settings.json": {},
     "codecov.yml": {},
-    "cspell.config.yaml": {},
+    "__cspell.config.yaml": {},
     "tox.ini": {},
 }

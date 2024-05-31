@@ -118,8 +118,11 @@ def main() -> None:
     try:
         fork_clone_all(config, repo_list)
         for file, file_data in FULL_FILES.items():
+            file_name = file
+            if file_name.startswith("__"):
+                file_name = file_name[2:]
             changed = full_file.run(
-                file_name=file,
+                file_name=file_name,
                 file_data=file_data,
                 config=config,
                 repo_list=repo_list,
