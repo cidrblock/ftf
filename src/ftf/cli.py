@@ -7,11 +7,11 @@ import sys
 from pathlib import Path
 
 from ftf.args import parse_args
-from ftf.checks import full_file, sort_cspell
+from ftf.checks import full_file, sort_lower
 from ftf.config import Config
 from ftf.output import Output, TermFeatures
 from ftf.repo import Repo
-from ftf.settings import FULL_FILES, REPOS
+from ftf.settings import FULL_FILES, REPOS, SORT_LOWER
 from ftf.utils import (
     ask_yes_no,
     tmp_path,
@@ -117,10 +117,7 @@ def main() -> None:
         return
     try:
         fork_clone_all(config, repo_list)
-        for file, file_data in FULL_FILES.items():
-            file_name = file
-            if file_name.startswith("__"):
-                file_name = file_name[2:]
+        for file_name, file_data in FULL_FILES.items():
             changed = full_file.run(
                 file_name=file_name,
                 file_data=file_data,
@@ -134,7 +131,8 @@ def main() -> None:
                 if not proceed:
                     sys.exit(0)
 
-        sort_cspell.run(config=config, repo_list=repo_list)
+        for file_name in SORT_LOWER:
+            sort_lower.run(config=config, repo_list=repo_list, file_name=file_name)
     except KeyboardInterrupt:
         print("/n")  # noqa: T201
         output.warning("Dirty exit. Some operations may not have completed.")

@@ -34,3 +34,7 @@ FULL_FILES: dict[str, dict[str, list[str]]] = {
     "__cspell.config.yaml": {},
     "tox.ini": {},
 }
+
+SORT_LOWER: list[str] = [
+    ".config/dictionary.txt",
+]

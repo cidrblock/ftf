@@ -31,8 +31,11 @@ def run(
     Returns:
         True if PRs were made, False otherwise.
     """
+    src_file_name = file_name
+    if file_name.startswith("__"):
+        file_name = file_name[2:]
     prs_made = False
-    base_file_path = path_to_data_file(file_name)
+    base_file_path = path_to_data_file(src_file_name)
     base_content = load_txt_file(base_file_path).splitlines()
     commit_msg = ""
     commit_text_file = None
