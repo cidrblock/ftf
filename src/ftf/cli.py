@@ -7,7 +7,7 @@ import sys
 from pathlib import Path
 
 from ftf.args import parse_args
-from ftf.checks import full_file, pre_commit, sort_lower
+from ftf.checks import full_file, pre_commit, py_project, sort_lower
 from ftf.config import Config
 from ftf.output import Output, TermFeatures
 from ftf.repo import Repo
@@ -144,6 +144,17 @@ def main() -> None:
             repo_list=repo_list,
         )
         changed = cls_pre_commit.run()
+        if changed and ask_yes_no(q):
+            sys.exit(0)
+
+        cls_pyproject = py_project.Check(
+            file_name="pyproject.toml",
+            config=config,
+            repo_list=repo_list,
+        )
+        changed = cls_pyproject.run()
+        if changed and ask_yes_no(q):
+            sys.exit(0)
 
     except KeyboardInterrupt:
         print("/n")  # noqa: T201

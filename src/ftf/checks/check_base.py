@@ -41,7 +41,7 @@ class CheckBase:
         self.file_name = kwargs["file_name"]
         self.config = kwargs["config"]
         self.repo_list = kwargs["repo_list"]
-        self.commit_msg: str
+        self.commit_msg: str = ""
         self.commit_text_file: Path
         self._revision_branch: str
         self._current_repo: Repo

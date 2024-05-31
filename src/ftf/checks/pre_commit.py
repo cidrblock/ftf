@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import io
 
-from typing import TYPE_CHECKING, Unpack
+from typing import Unpack
 
 from ansiblelint.yaml_utils import FormattedYAML
 
@@ -13,10 +13,6 @@ from ftf.settings import PRE_COMMIT
 from ftf.utils import (
     path_to_data_file,
 )
-
-
-if TYPE_CHECKING:
-    from ftf.repo import Repo
 
 
 class Check(CheckBase):
@@ -45,22 +41,19 @@ class Check(CheckBase):
             self.base_file_content = f.read()
 
         for repo in self.repo_list:
-            self._each_repo(repo=repo)
+            self._current_repo = repo
+            self._each_repo()
         return self._prs_made
 
-    def _each_repo(self: Check, repo: Repo) -> None:
+    def _each_repo(self: Check) -> None:
         """Run the check for each repository.
-
-        Args:
-            repo: The repository to check.
 
         Returns:
             True if PRs were made, False otherwise.
         """
-        self._current_repo = repo
         base_data_content = self.yaml.load(self.base_file_content)
 
-        repo_file_path = repo.work_dir.joinpath(self.file_name)
+        repo_file_path = self._current_repo.work_dir.joinpath(self.file_name)
         with repo_file_path.open() as f:
             repo_file_content = f.read()
         repo_data_content = self.yaml.load(repo_file_content)
@@ -74,18 +67,24 @@ class Check(CheckBase):
                 if pc_repo["repo"] == pc_repo_uri
             ]
             if len(found) > 1:
-                err = f"[{repo.name}] Multiple entries for {pc_repo_uri} in {self.file_name}."
+                err = (
+                    f"[{self._current_repo.name}] Multiple entries for"
+                    " {pc_repo_uri} in {self.file_name}."
+                )
                 self.config.output.error(err)
                 continue
 
             if not found:
-                err = f"[{repo.name}] Entry not found for {pc_repo_uri} in {self.file_name}."
+                err = (
+                    f"[{self._current_repo.name}] Entry not found for"
+                    " {pc_repo_uri} in {self.file_name}."
+                )
                 self.config.output.error(err)
                 found = [base_pc_repo]
 
             if (
-                repo.name in PRE_COMMIT
-                and base_pc_repo["repo"] in PRE_COMMIT[repo.name]["skip"]
+                self._current_repo.name in PRE_COMMIT
+                and base_pc_repo["repo"] in PRE_COMMIT[self._current_repo.name]["skip"]
             ):
                 new_repo_list.append(found[0])
                 continue
@@ -124,6 +123,8 @@ class Check(CheckBase):
         self._make_branch()
 
         repo_file_path.write_text(new_content)
-        self.config.output.debug(f"[{repo.name}] Updated {self.file_name}.")
+        self.config.output.debug(
+            f"[{self._current_repo.name}] Updated {self.file_name}.",
+        )
 
         self._make_pr()

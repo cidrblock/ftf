@@ -84,6 +84,7 @@ repos:
           - --output-format=colorized
         additional_dependencies:
           - ansible-lint
+          - tomlkit
           - pytest
           - setuptools
           - subprocess_tee
@@ -96,6 +97,7 @@ repos:
           - ansible-lint
           - pytest
           - subprocess_tee
+          - tomlkit
           - types-pyyaml
           - types-setuptools
         # Override default pre-commit '--ignore-missing-imports'
