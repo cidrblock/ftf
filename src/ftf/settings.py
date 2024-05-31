@@ -38,3 +38,7 @@ FULL_FILES: dict[str, dict[str, list[str]]] = {
 SORT_LOWER: list[str] = [
     ".config/dictionary.txt",
 ]
+
+PRE_COMMIT: dict[str, dict[str, list[str]]] = {
+    "ansible-dev-tools": {"skip": ["https://github.com/jazzband/pip-tools"]},
+}

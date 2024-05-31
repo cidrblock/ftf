@@ -85,13 +85,16 @@ def tmp_path() -> Path:
     return Path(tempfile.mkdtemp(prefix="ftf_"))
 
 
-def tmp_file() -> Path:
+def tmp_file(suffix: str | None = None) -> Path:
     """Return a temporary file.
+
+    Args:
+        suffix: The suffix for the file.
 
     Returns:
         The temporary file.
     """
-    return Path(tempfile.mkstemp(prefix="ftf_")[1])
+    return Path(tempfile.mkstemp(prefix="ftf_", suffix=suffix)[1])
 
 
 def render_diff(diff: Iterator[str]) -> None:

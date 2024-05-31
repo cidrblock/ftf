@@ -1,10 +1,11 @@
+ansiblelint
 cidrblock
+codecov
+CODEOWNERS
 levelname
+mkdocs
 mypy
 pylint
 pytest
-tofile
 runable
-codecov
-CODEOWNERS
-mkdocs
+tofile

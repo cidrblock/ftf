@@ -7,7 +7,7 @@ import sys
 from pathlib import Path
 
 from ftf.args import parse_args
-from ftf.checks import full_file, sort_lower
+from ftf.checks import full_file, pre_commit, sort_lower
 from ftf.config import Config
 from ftf.output import Output, TermFeatures
 from ftf.repo import Repo
@@ -116,23 +116,35 @@ def main() -> None:
         output.info("Exiting...")
         return
     try:
+        q = "PRs have been made. Do you want to continue with the next file?"
         fork_clone_all(config, repo_list)
         for file_name, file_data in FULL_FILES.items():
-            changed = full_file.run(
+            cls_full_file = full_file.Check(
                 file_name=file_name,
-                file_data=file_data,
                 config=config,
                 repo_list=repo_list,
             )
-            if changed:
-                proceed = ask_yes_no(
-                    "PRs have been made. Do you want to continue with the check?",
-                )
-                if not proceed:
-                    sys.exit(0)
+            changed = cls_full_file.run(file_data=file_data)
+            if changed and ask_yes_no(q):
+                sys.exit(0)
 
         for file_name in SORT_LOWER:
-            sort_lower.run(config=config, repo_list=repo_list, file_name=file_name)
+            cls_sort_lower = sort_lower.Check(
+                file_name=file_name,
+                config=config,
+                repo_list=repo_list,
+            )
+            changed = cls_sort_lower.run()
+            if changed and ask_yes_no(q):
+                sys.exit(0)
+
+        cls_pre_commit = pre_commit.Check(
+            file_name=".pre-commit-config.yaml",
+            config=config,
+            repo_list=repo_list,
+        )
+        changed = cls_pre_commit.run()
+
     except KeyboardInterrupt:
         print("/n")  # noqa: T201
         output.warning("Dirty exit. Some operations may not have completed.")

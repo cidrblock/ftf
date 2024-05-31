@@ -1,57 +1,59 @@
 """Sort and lowercase a file."""
 
-from ftf.config import Config
-from ftf.repo import Repo
-from ftf.utils import ask_yes_no, tmp_file
+from __future__ import annotations
+
+from typing import Unpack
+
+from ftf.checks.check_base import CheckBase, CheckBaseParams
+from ftf.utils import tmp_file
 
 
-def run(config: Config, repo_list: list[Repo], file_name: str) -> None:
-    """Run the check.
+class Check(CheckBase):
+    """Sort and lowercase a file."""
 
-    Args:
-        config: The configuration data.
-        repo_list: The list of repositories.
-        file_name: The file to check.
-    """
-    commit_msg = f"Sort, lowercase and remove and duplicates in {file_name}"
-    commit_text_file = None
+    def __init__(self: Check, **kwargs: Unpack[CheckBaseParams]) -> None:
+        """Initialize the class.
 
-    for repo in repo_list:
-        with (repo.work_dir / file_name).open(mode="r") as f:
-            orig_lines = f.readlines()
-        revised_lines = sorted({line.lower() for line in orig_lines})
-        if revised_lines == orig_lines:
-            config.output.info(
-                f"[{repo.name}] The {file_name} is sorted and lowercased.",
-            )
-            continue
-        config.output.warning(
-            f"[{repo.name}] The {file_name} is not sorted and lowercased.",
-        )
-        if config.args.dry_run:
-            continue
+        Args:
+            **kwargs: The parameters.
+        """
+        super().__init__(**kwargs)
 
-        go = ask_yes_no(f"Do you want to remediate {file_name}?")
-        if not go:
-            continue
+        self.commit_msg = f"Sort, lowercase and remove duplicates in {self.file_name}"
 
-        commit_text_file = tmp_file()
-        with commit_text_file.open(mode="w") as f:
-            f.write(commit_msg)
+    def run(self: Check) -> bool:
+        """Run the check.
 
-        new_branch = f"chore/file_{file_name}_{config.session_id}"
-        repo.branch_in_origin(new_branch=new_branch)
+        Returns:
+            True if PRs were made, False otherwise.
+        """
+        for repo in self.repo_list:
+            self._current_repo = repo
+            self._each_repo()
+        return self._prs_made
 
-        with (repo.work_dir / file_name).open(mode="w") as f:
-            f.writelines(revised_lines)
-        config.output.info(f"[{repo.name}] Updated {file_name}.")
+    def _each_repo(self: Check) -> None:
+        """Run the check for each repository."""
+        repo_file_path = self._current_repo.work_dir / self.file_name
 
-        repo.stage_file(file_name=file_name)
-        repo.commit_file(commit_text_file=commit_text_file)
-        repo.push_origin(new_branch=new_branch)
-        repo.create_pr(
-            file_name=file_name,
-            new_branch=new_branch,
-            commit_text_file=commit_text_file,
-        )
-        repo.ensure_main()
+        orig_content = repo_file_path.read_text()
+        revised_lines = sorted({line.lower() for line in orig_content.splitlines()})
+        revised_content = "\n".join(revised_lines) + "\n"
+
+        if self._compare(current=orig_content, desired=revised_content):
+            return
+
+        if self.config.args.dry_run:
+            return
+
+        if not self.commit_text_file:
+            self.commit_text_file = tmp_file()
+            self.commit_text_file.write_text(self.commit_msg)
+
+        self._make_branch()
+
+        repo_file_path.write_text(revised_content)
+        msg = f"[{self._current_repo.name}] Updated {self.file_name}."
+        self.config.output.info(msg)
+
+        self._make_pr()
