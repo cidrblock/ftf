@@ -125,7 +125,7 @@ def main() -> None:
                 repo_list=repo_list,
             )
             changed = cls_full_file.run(file_data=file_data)
-            if changed and ask_yes_no(q):
+            if changed and not ask_yes_no(q):
                 sys.exit(0)
 
         for file_name in SORT_LOWER:
@@ -135,7 +135,7 @@ def main() -> None:
                 repo_list=repo_list,
             )
             changed = cls_sort_lower.run()
-            if changed and ask_yes_no(q):
+            if changed and not ask_yes_no(q):
                 sys.exit(0)
 
         cls_pre_commit = pre_commit.Check(
@@ -144,7 +144,7 @@ def main() -> None:
             repo_list=repo_list,
         )
         changed = cls_pre_commit.run()
-        if changed and ask_yes_no(q):
+        if changed and not ask_yes_no(q):
             sys.exit(0)
 
         cls_pyproject = py_project.Check(
@@ -153,7 +153,7 @@ def main() -> None:
             repo_list=repo_list,
         )
         changed = cls_pyproject.run()
-        if changed and ask_yes_no(q):
+        if changed and not ask_yes_no(q):
             sys.exit(0)
 
     except KeyboardInterrupt:

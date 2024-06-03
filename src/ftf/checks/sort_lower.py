@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Unpack
 
 from ftf.checks.check_base import CheckBase, CheckBaseParams
-from ftf.utils import tmp_file
+from ftf.utils import ask_yes_no, tmp_file
 
 
 class Check(CheckBase):
@@ -37,7 +37,9 @@ class Check(CheckBase):
         repo_file_path = self._current_repo.work_dir / self.file_name
 
         orig_content = repo_file_path.read_text()
-        revised_lines = sorted({line.lower() for line in orig_content.splitlines()})
+        revised_lines = sorted(
+            {line.lower() for line in orig_content.splitlines() if not line.startswith("#")},
+        )
         revised_content = "\n".join(revised_lines) + "\n"
 
         if self._compare(current=orig_content, desired=revised_content):
@@ -46,9 +48,13 @@ class Check(CheckBase):
         if self.config.args.dry_run:
             return
 
-        if not self.commit_text_file:
+        if not hasattr(self, "commit_text_file"):
             self.commit_text_file = tmp_file()
             self.commit_text_file.write_text(self.commit_msg)
+
+        q = f"Do you want to update the {self.file_name} file in {self._current_repo.name}?"
+        if not ask_yes_no(q):
+            return
 
         self._make_branch()
 

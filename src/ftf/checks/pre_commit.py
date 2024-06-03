@@ -62,9 +62,7 @@ class Check(CheckBase):
         for base_pc_repo in base_data_content["repos"]:
             pc_repo_uri = base_pc_repo["repo"]
             found = [
-                pc_repo
-                for pc_repo in repo_data_content["repos"]
-                if pc_repo["repo"] == pc_repo_uri
+                pc_repo for pc_repo in repo_data_content["repos"] if pc_repo["repo"] == pc_repo_uri
             ]
             if len(found) > 1:
                 err = (

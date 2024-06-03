@@ -51,7 +51,7 @@ class Check(CheckBase):
             self._each_repo(repo=repo)
         return self._prs_made
 
-    def _each_repo(self: Check, repo: Repo) -> None:  # noqa: C901, PLR0915
+    def _each_repo(self: Check, repo: Repo) -> None:  # noqa: C901, PLR0915, PLR0912
         """Run the check for each repository.
 
         Args:
@@ -121,6 +121,8 @@ class Check(CheckBase):
         # tool.pytest.ini_options
         btpi = get_table("ini_options", btp)
         rtpi = get_table("ini_options", rtp)
+        if "markers" in rtpi:
+            btpi["markers"] = rtpi["markers"]
         if "norecursedirs" in rtpi:
             btpi["norecursedirs"] = rtpi["norecursedirs"]
         if not str(rtpi["addopts"]).startswith(str(btpi["addopts"])):

@@ -12,7 +12,7 @@ maintainers = [{"email" = "info@ansible.com", "name" = "Ansible by Red Hat"}]
 line-length = 100
 
 [tool.coverage.report]
-exclude_lines = ["if TYPE_CHECKING:", "pragma: no cover"]
+exclude_also = ["if TYPE_CHECKING:", "pragma: no cover"]
 ignore_errors = true
 show_missing = true
 skip_covered = true

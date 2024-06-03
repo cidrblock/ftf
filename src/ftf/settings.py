@@ -1,14 +1,6 @@
 """Some settings in python format to avoid missing types from a yaml or toml file."""
 
 REPOS: dict[str, dict[str, str]] = {
-    "tox-ansible": {
-        "origin": "{origin_org}/tox-ansible",
-        "upstream": "ansible/tox-ansible",
-    },
-    "ansible-dev-tools": {
-        "origin": "{origin_org}/ansible-dev-tools",
-        "upstream": "ansible/ansible-dev-tools",
-    },
     "ansible-creator": {
         "origin": "{origin_org}/ansible-creator",
         "upstream": "ansible/ansible-creator",
@@ -17,9 +9,22 @@ REPOS: dict[str, dict[str, str]] = {
         "origin": "{origin_org}/ansible-dev-environment",
         "upstream": "ansible/ansible-dev-environment",
     },
+    "ansible-dev-tools": {
+        "origin": "{origin_org}/ansible-dev-tools",
+        "upstream": "ansible/ansible-dev-tools",
+    },
+    "pytest-ansible": {
+        "origin": "{origin_org}/pytest-ansible",
+        "upstream": "ansible/pytest-ansible",
+    },
+    "tox-ansible": {
+        "origin": "{origin_org}/tox-ansible",
+        "upstream": "ansible/tox-ansible",
+    },
 }
 
 FULL_FILES: dict[str, dict[str, list[str]]] = {
+    ".flake8": {"skip": ["pytest-ansible"]},
     ".github/CODE_OF_CONDUCT.md": {},
     ".github/CODEOWNERS": {},
     ".github/dependabot.yml": {"skip": ["ansible-dev-tools"]},
