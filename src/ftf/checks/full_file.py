@@ -46,15 +46,11 @@ class Check(CheckBase):
         skip = file_data.get("skip", [])
 
         for repo in self.repo_list:
-            if repo.name in skip:
-                msg = f"[{repo.name}] Configured as skip for {self.file_name}, check manually"
-                self.config.output.warning(msg)
-                continue
             self._current_repo = repo
-            self._each_repo()
+            self._each_repo(repo_name=repo.name, skip=skip)
         return self._prs_made
 
-    def _each_repo(self: Check) -> None:
+    def _each_repo(self: Check, repo_name: str, skip: list[str]) -> None:
         """Run the check for each repository."""
         self.config.output.info(
             f"[{self._current_repo.name}] Checking {self.file_name}...",
@@ -66,6 +62,12 @@ class Check(CheckBase):
             return
 
         if self.config.args.dry_run:
+            return
+
+        if repo_name in skip:
+            msg = f"[{repo_name}] Configured as skip for {self.file_name}, check manually"
+            self.config.output.warning(msg)
+            input("Press Enter to continue...")
             return
 
         if not self._get_commit_msg():

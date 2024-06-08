@@ -126,8 +126,14 @@ class Check(CheckBase):
             btpi["markers"] = rtpi["markers"]
         if "norecursedirs" in rtpi:
             btpi["norecursedirs"] = rtpi["norecursedirs"]
+        key = "tmp_path_retention_policy"
+        if key not in rtpi:
+            del btpi[key]
+            msg = f"[{repo.name}] tool.pytest.init_options.{key} removed."
+            self.config.output.warning(msg)
         if not str(rtpi["addopts"]).startswith(str(btpi["addopts"])):
             msg = "[{repo.name}] Check tool.pytest.init_options.addopts manually."
+            self.config.output.warning(msg)
         btpi["addopts"] = rtpi["addopts"]
 
         # tool.ruff

@@ -35,13 +35,13 @@ FULL_FILES: dict[str, dict[str, list[str]]] = {
     ".github/release-drafter.yml": {},
     ".github/workflows/ack.yml": {},
     ".github/workflows/push.yml": {},
-    ".github/workflows/tox.yml": {},
+    ".github/workflows/tox.yml": {"skip": ["molecule"]},
     ".readthedocs.yml": {},
     ".vscode/extensions.json": {},
     ".vscode/settings.json": {},
     "codecov.yml": {},
     "__cspell.config.yaml": {},
-    "tox.ini": {},
+    "tox.ini": {"skip": ["molecule"]},
 }
 
 SORT_LOWER: list[str] = [
