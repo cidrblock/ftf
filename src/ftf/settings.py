@@ -13,6 +13,10 @@ REPOS: dict[str, dict[str, str]] = {
         "origin": "{origin_org}/ansible-dev-tools",
         "upstream": "ansible/ansible-dev-tools",
     },
+    "molecule": {
+        "origin": "{origin_org}/molecule",
+        "upstream": "ansible/molecule",
+    },
     "pytest-ansible": {
         "origin": "{origin_org}/pytest-ansible",
         "upstream": "ansible/pytest-ansible",
@@ -24,7 +28,7 @@ REPOS: dict[str, dict[str, str]] = {
 }
 
 FULL_FILES: dict[str, dict[str, list[str]]] = {
-    ".flake8": {"skip": ["pytest-ansible"]},
+    ".flake8": {"skip": ["pytest-ansible", "molecule"]},
     ".github/CODE_OF_CONDUCT.md": {},
     ".github/CODEOWNERS": {},
     ".github/dependabot.yml": {"skip": ["ansible-dev-tools"]},
@@ -46,4 +50,5 @@ SORT_LOWER: list[str] = [
 
 PRE_COMMIT: dict[str, dict[str, list[str]]] = {
     "ansible-dev-tools": {"skip": ["https://github.com/jazzband/pip-tools"]},
+    "molecule": {"skip": ["https://github.com/ansible/ansible-lint"]},
 }

@@ -1,5 +1,6 @@
-# cspell:ignore btcr, rtcr, btpm, rtpm, btpi, rtpi, norecursedirs,
+# cspell:ignore btcr, rtcr, btpm, rtpm, btpi, rtpi, norecursedirs
 # cspell:ignore btpmi, rtpmi, btrl, btrlp, rtrl, rtrlp, addopts
+# cspell:ignore btrli, rtrli, known_first_party
 """Check the pyproject.toml file."""
 
 from __future__ import annotations
@@ -143,6 +144,10 @@ class Check(CheckBase):
         for key, value in rtrlp.items():
             if key not in btrlp:
                 btrlp[key] = value
+        btrli = get_table("isort", btrl)
+        rtrli = get_table("isort", rtrl)
+        if "known-first-party" in rtrli:
+            btrli["known-first-party"] = rtrli["known-first-party"]
 
         # tool.setuptools.dynamic
         bts = get_table("setuptools", bt)

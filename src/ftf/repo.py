@@ -110,7 +110,7 @@ class Repo:
         )
 
         msg = f"[{self.name}] Pushing to origin/main..."
-        command = "git push origin main"
+        command = "git push origin main --force"
         subprocess_run(
             command=command,
             cwd=self.work_dir,

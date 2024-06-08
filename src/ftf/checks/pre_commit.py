@@ -59,7 +59,9 @@ class Check(CheckBase):
         repo_data_content = self.yaml.load(repo_file_content)
 
         new_repo_list = []
+        expected_repos = []
         for base_pc_repo in base_data_content["repos"]:
+            expected_repos.append(base_pc_repo["repo"])
             pc_repo_uri = base_pc_repo["repo"]
             found = [
                 pc_repo for pc_repo in repo_data_content["repos"] if pc_repo["repo"] == pc_repo_uri
@@ -102,6 +104,20 @@ class Check(CheckBase):
                 new_base["hooks"][0][uniq] = found[0]["hooks"][0][uniq]
 
             new_repo_list.append(new_base)
+
+        if self._current_repo.name in PRE_COMMIT:
+            for skip in PRE_COMMIT[self._current_repo.name]["skip"]:
+                if skip in expected_repos:
+                    continue
+                found = [r for r in repo_data_content["repos"] if r["repo"] == skip]
+                if not found:
+                    err = (
+                        f"[{self._current_repo.name}] Entry not found for"
+                        f" {skip} in {self.file_name}."
+                    )
+                    self.config.output.error(err)
+                    continue
+                new_repo_list.append(found[0])
 
         base_data_content["repos"] = new_repo_list
 
