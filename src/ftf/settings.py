@@ -17,10 +17,10 @@ REPOS: dict[str, dict[str, str]] = {
         "origin": "{origin_org}/molecule",
         "upstream": "ansible/molecule",
     },
-    "pytest-ansible": {
-        "origin": "{origin_org}/pytest-ansible",
-        "upstream": "ansible/pytest-ansible",
-    },
+    # "pytest-ansible": {
+    #     "origin": "{origin_org}/pytest-ansible",
+    #     "upstream": "ansible/pytest-ansible",
+    # },
     "tox-ansible": {
         "origin": "{origin_org}/tox-ansible",
         "upstream": "ansible/tox-ansible",
@@ -28,20 +28,20 @@ REPOS: dict[str, dict[str, str]] = {
 }
 
 FULL_FILES: dict[str, dict[str, list[str]]] = {
-    ".flake8": {"skip": ["pytest-ansible", "molecule"]},
     ".github/CODE_OF_CONDUCT.md": {},
     ".github/CODEOWNERS": {},
     ".github/dependabot.yml": {"skip": ["ansible-dev-tools"]},
-    ".github/release-drafter.yml": {},
+    ".github/release-drafter.yml": {"skip": ["ansible-dev-tools"]},
     ".github/workflows/ack.yml": {},
     ".github/workflows/push.yml": {},
     ".github/workflows/tox.yml": {"skip": ["molecule"]},
     ".readthedocs.yml": {},
     ".vscode/extensions.json": {},
     ".vscode/settings.json": {},
+    ".vscode/tasks.json": {},
     "codecov.yml": {},
     "__cspell.config.yaml": {},
-    "tox.ini": {"skip": ["molecule"]},
+    "tox.ini": {"skip": ["ansible-dev-tools", "molecule"]},
 }
 
 SORT_LOWER: list[str] = [
