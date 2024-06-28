@@ -34,7 +34,7 @@ FULL_FILES: dict[str, dict[str, list[str]]] = {
     ".github/release-drafter.yml": {"skip": ["ansible-dev-tools"]},
     ".github/workflows/ack.yml": {},
     ".github/workflows/push.yml": {},
-    ".github/workflows/tox.yml": {"skip": ["molecule"]},
+    ".github/workflows/tox.yml": {"skip": ["molecule", "ansible-dev-tools"]},
     ".readthedocs.yml": {},
     ".vscode/extensions.json": {},
     ".vscode/settings.json": {},
