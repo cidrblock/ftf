@@ -51,7 +51,12 @@ class Check(CheckBase):
         return self._prs_made
 
     def _each_repo(self: Check, repo_name: str, skip: list[str]) -> None:
-        """Run the check for each repository."""
+        """Run the check for each repository.
+
+        Args:
+            repo_name: The name of the repository.
+            skip: The list of repositories to skip.
+        """
         self.config.output.info(
             f"[{self._current_repo.name}] Checking {self.file_name}...",
         )

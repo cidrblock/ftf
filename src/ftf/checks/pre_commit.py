@@ -45,7 +45,7 @@ class Check(CheckBase):
             self._each_repo()
         return self._prs_made
 
-    def _each_repo(self: Check) -> None:
+    def _each_repo(self: Check) -> None:  # noqa: C901, PLR0912
         """Run the check for each repository.
 
         Returns:
