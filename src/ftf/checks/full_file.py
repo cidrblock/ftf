@@ -56,7 +56,10 @@ class Check(CheckBase):
             f"[{self._current_repo.name}] Checking {self.file_name}...",
         )
         repo_file_path = self._current_repo.work_dir.joinpath(self.file_name)
-        repo_content = repo_file_path.read_text()
+        try:
+            repo_content = repo_file_path.read_text()
+        except FileNotFoundError:
+            repo_content = ""
 
         if self._compare(current=self._base_file_content, desired=repo_content):
             return

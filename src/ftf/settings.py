@@ -17,10 +17,10 @@ REPOS: dict[str, dict[str, str]] = {
         "origin": "{origin_org}/molecule",
         "upstream": "ansible/molecule",
     },
-    # "pytest-ansible": {
-    #     "origin": "{origin_org}/pytest-ansible",
-    #     "upstream": "ansible/pytest-ansible",
-    # },
+    "pytest-ansible": {
+        "origin": "{origin_org}/pytest-ansible",
+        "upstream": "ansible/pytest-ansible",
+    },
     "tox-ansible": {
         "origin": "{origin_org}/tox-ansible",
         "upstream": "ansible/tox-ansible",
@@ -34,10 +34,11 @@ FULL_FILES: dict[str, dict[str, list[str]]] = {
     ".github/release-drafter.yml": {"skip": ["ansible-dev-tools"]},
     ".github/workflows/ack.yml": {},
     ".github/workflows/push.yml": {},
+    ".github/workflows/release.yml": {"skip": ["ansible-dev-tools"]},
     ".github/workflows/tox.yml": {"skip": ["molecule", "ansible-dev-tools"]},
     ".readthedocs.yml": {},
     ".vscode/extensions.json": {},
-    ".vscode/settings.json": {},
+    ".vscode/settings.json": {"skip": ["ansible-dev-tools"]},
     ".vscode/tasks.json": {},
     "codecov.yml": {},
     "__cspell.config.yaml": {},
