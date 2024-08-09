@@ -36,7 +36,14 @@ class Check(CheckBase):
         """Run the check for each repository."""
         repo_file_path = self._current_repo.work_dir / self.file_name
 
-        orig_content = repo_file_path.read_text()
+        try:
+            orig_content = repo_file_path.read_text()
+        except FileNotFoundError:
+            msg = f"{self.file_name} not found in {self._current_repo.name}."
+            self.config.output.warning(msg)
+            input("Press Enter to continue...")
+            return
+
         revised_lines = sorted(
             {line.lower() for line in orig_content.splitlines() if not line.startswith("#")},
         )

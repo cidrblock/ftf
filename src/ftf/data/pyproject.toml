@@ -22,6 +22,7 @@ sort = "Cover"
 [tool.coverage.run]
 branch = false # https://github.com/nedbat/coveragepy/issues/605
 concurrency = ["multiprocessing", "thread"]
+omit = ["_version.py"]
 parallel = true
 source_pkgs = ["ansible_dev_environment"]
 
@@ -36,6 +37,7 @@ arg-type-hints-in-docstring = false
 baseline = ".config/pydoclint-baseline.txt"
 check-return-types = false
 exclude = '\.git|\.tox|build|out|venv'
+should-document-private-class-attributes = true
 show-filenames-in-every-violation-message = true
 skip-checking-short-docstrings = false
 style = "google"
@@ -305,6 +307,7 @@ parametrize-values-type = "tuple"
 [tool.ruff.lint.isort]
 lines-after-imports = 2 # Ensures consistency for cases when there's variable vs function/class definitions after imports
 lines-between-types = 1 # Separate import/from with 1 line
+required-imports = ["from __future__ import annotations"]
 
 [tool.ruff.lint.per-file-ignores]
 "_version.py" = ["SIM108"]

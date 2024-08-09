@@ -1,10 +1,10 @@
 """Some settings in python format to avoid missing types from a yaml or toml file."""
 
 REPOS: dict[str, dict[str, str]] = {
-    "ansible-compat": {
-        "origin": "{origin_org}/ansible-compat",
-        "upstream": "ansible/ansible-compat",
-    },
+    # "ansible-compat": {
+    #     "origin": "{origin_org}/ansible-compat",
+    #     "upstream": "ansible/ansible-compat",
+    # },
     "ansible-creator": {
         "origin": "{origin_org}/ansible-creator",
         "upstream": "ansible/ansible-creator",
@@ -17,14 +17,14 @@ REPOS: dict[str, dict[str, str]] = {
         "origin": "{origin_org}/ansible-dev-tools",
         "upstream": "ansible/ansible-dev-tools",
     },
-    "ansible-lint": {
-        "origin": "{origin_org}/ansible-lint",
-        "upstream": "ansible/ansible-lint",
-    },
-    "ansible-navigator": {
-        "origin": "{origin_org}/ansible-navigator",
-        "upstream": "ansible/ansible-navigator",
-    },
+    # "ansible-lint": {
+    #     "origin": "{origin_org}/ansible-lint",
+    #     "upstream": "ansible/ansible-lint",
+    # },
+    # "ansible-navigator": {
+    #     "origin": "{origin_org}/ansible-navigator",
+    #     "upstream": "ansible/ansible-navigator",
+    # },
     "molecule": {
         "origin": "{origin_org}/molecule",
         "upstream": "ansible/molecule",
@@ -64,11 +64,9 @@ FULL_FILES: dict[str, dict[str, list[str]]] = {
     },
     ".readthedocs.yml": {"skip": ["ansible-compat", "ansible-lint", "ansible-navigator"]},
     ".sonarcloud.properties": {"skip": ["ansible-compat", "ansible-lint"]},
-    ".vscode/extensions.json": {"skip": ["ansible-compat", "ansible-lint", "ansible-navigator"]},
-    ".vscode/settings.json": {
-        "skip": ["ansible-dev-tools", "ansible-compat", "ansible-lint", "ansible-navigator"],
-    },
-    ".vscode/tasks.json": {"skip": ["ansible-compat", "ansible-lint", "ansible-navigator"]},
+    ".vscode/extensions.json": {"skip": ["ansible-compat", "ansible-lint"]},
+    ".vscode/settings.json": {"skip": ["ansible-compat", "ansible-lint", "ansible-dev-tools"]},
+    ".vscode/tasks.json": {"skip": ["ansible-compat", "ansible-lint"]},
     "codecov.yml": {"skip": ["ansible-compat", "ansible-lint", "ansible-navigator"]},
     "__cspell.config.yaml": {"skip": ["ansible-compat", "ansible-lint", "ansible-navigator"]},
     "tox.ini": {
